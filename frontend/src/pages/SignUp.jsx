@@ -6,6 +6,8 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
 
 const SignUp = () => {
   const primaryColor = "#ff4d2d";
@@ -23,18 +25,43 @@ const SignUp = () => {
   const [password, setPassword] = useState("");
   const [mobile, setMobile] = useState("");
 
-  const handleSignUp = async()=>{
+  const handleSignUp = async () => {
     try {
-        const result = await axios.post(`${serverUrl}/api/auth/signup`,{
-            fullName,email,password,mobile,role
-        }, {withCredentials:true})
-        console.log(result);
-        
+      const result = await axios.post(
+        `${serverUrl}/api/auth/signup`,
+        {
+          fullName,
+          email,
+          password,
+          mobile,
+          role,
+        },
+        { withCredentials: true }
+      );
+      console.log(result);
     } catch (error) {
-        console.log(error);
-        
+      console.log(error);
     }
-  }
+  };
+
+  const handleGoogleAuth = async () => {
+    if (!mobile) {
+      return alert("Mobile number is required");
+    }
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    console.log(result);
+    try {
+      const { data } = await axios.post(`${serverUrl}/api/auth/google-auth`, {
+        fullName: result.user.displayName,
+        email: result.user.email,
+        role,
+        mobile
+      },{withCredentials: true});
+      console.log(data);
+      
+    } catch (error) {}
+  };
 
   return (
     <div
@@ -152,12 +179,18 @@ const SignUp = () => {
             ))}
           </div>
         </div>
-        <button className="w-full mt-2 font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer" onClick={handleSignUp}>
+        <button
+          className="w-full mt-2 font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
+          onClick={handleSignUp}
+        >
           Sign Up
         </button>
 
         {/* google login */}
-        <button className="w-full mt-4 flex items-center justify-center gap-2 border border-gray-200 rounded-lg px-4 py-2 transition-all duration-400 hover:bg-gray-100 cursor-pointer">
+        <button
+          className="w-full mt-4 flex items-center justify-center gap-2 border border-gray-200 rounded-lg px-4 py-2 transition-all duration-400 hover:bg-gray-100 cursor-pointer"
+          onClick={handleGoogleAuth}
+        >
           <FcGoogle size={20} />
           <span>Sign Up with Google</span>
         </button>
