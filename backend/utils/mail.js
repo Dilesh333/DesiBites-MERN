@@ -18,6 +18,6 @@ export const sendOtpMail = async(to, otp) =>{
         from: process.env.EMAIL,
         to,
         subject: "Your OTP for Password Reset",
-        html: <p>`Your OTP for password reset is ${otp}. It is valid for 5 minutes. If you did not request this, please ignore this email.`</p>,
+        html: `<p>Your OTP for password reset is <b>${otp}</b>. It is valid for 5 minutes. If you did not request this, please ignore this email.</p>`,
     })
 }
