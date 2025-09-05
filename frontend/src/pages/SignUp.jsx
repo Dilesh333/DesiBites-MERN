@@ -8,8 +8,7 @@ import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
-import { ClipLoader } from "react-spinners"
-
+import { ClipLoader } from "react-spinners";
 
 const SignUp = () => {
   const primaryColor = "#ff4d2d";
@@ -49,6 +48,7 @@ const SignUp = () => {
       setLoading(false);
     } catch (error) {
       setError(error?.response?.data?.message);
+      setLoading(false);
     }
   };
 
@@ -202,8 +202,7 @@ const SignUp = () => {
           onClick={handleSignUp}
           disabled={loading}
         >
-          {loading ? <ClipLoader size={20}/> : "Sign Up"} 
-          
+          {loading ? <ClipLoader size={20} color="white" /> : "Sign Up"}
         </button>
 
         <p className="text-red-600 font-medium text-center my-[10px]">

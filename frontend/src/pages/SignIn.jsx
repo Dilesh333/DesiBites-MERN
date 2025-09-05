@@ -9,6 +9,8 @@ import { serverUrl } from "../App";
 import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 
+import { ClipLoader } from "react-spinners";
+
 
 const SignIn = () => {
   const primaryColor = "#ff4d2d";
@@ -24,8 +26,11 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
+  const [loading, setLoading] = useState(false)
+
   const handleSignIn = async () => {
     try {
+      setLoading(true)
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
         {
@@ -36,8 +41,10 @@ const SignIn = () => {
       );
       console.log(result);
       setError("");
+      setLoading(false)
     } catch (error) {
       setError(error?.response?.data?.message);
+      setLoading(false)
     }
   };
 
@@ -136,7 +143,8 @@ const SignIn = () => {
           className="w-full mt-2 font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
           onClick={handleSignIn}
         >
-          Sign In
+          {loading ? <ClipLoader size={20} color="white" /> : "Sign In"}
+          
         </button>
         <p className="text-red-600 font-medium text-center my-[10px]">
           {error}
