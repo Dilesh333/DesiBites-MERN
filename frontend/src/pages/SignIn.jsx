@@ -6,6 +6,9 @@ import { FaRegEyeSlash } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
+import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
+import { auth } from "../../firebase";
+
 
 const SignIn = () => {
   const primaryColor = "#ff4d2d";
@@ -19,6 +22,7 @@ const SignIn = () => {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleSignIn = async () => {
     try {
@@ -31,6 +35,25 @@ const SignIn = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setError("");
+    } catch (error) {
+      setError(error?.response?.data?.message);
+    }
+  };
+
+  const handleGoogleAuth = async () => {
+    const provider = new GoogleAuthProvider();
+    const result = await signInWithPopup(auth, provider);
+    console.log(result);
+    try {
+      const { data } = await axios.post(
+        `${serverUrl}/api/auth/google-auth`,
+        {
+          email: result.user.email,
+        },
+        { withCredentials: true }
+      );
+      console.log(data);
     } catch (error) {
       console.log(error);
     }
@@ -70,6 +93,7 @@ const SignIn = () => {
             style={{ border: `1px solid ${borderColor}` }}
             onChange={(e) => setEmail(e.target.value)}
             value={email}
+            required
           />
         </div>
 
@@ -89,6 +113,7 @@ const SignIn = () => {
               style={{ border: `1px solid ${borderColor}` }}
               onChange={(e) => setPassword(e.target.value)}
               value={password}
+              required
             />
 
             <button
@@ -100,7 +125,12 @@ const SignIn = () => {
           </div>
         </div>
 
-        <div className="text-right mb-2 text-[#ff4d2d] font-medium cursor-pointer" onClick={()=>navigate("/forgot-password")}>Forgot Password</div>
+        <div
+          className="text-right mb-2 text-[#ff4d2d] font-medium cursor-pointer"
+          onClick={() => navigate("/forgot-password")}
+        >
+          Forgot Password
+        </div>
 
         <button
           className="w-full mt-2 font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
@@ -108,9 +138,15 @@ const SignIn = () => {
         >
           Sign In
         </button>
+        <p className="text-red-600 font-medium text-center my-[10px]">
+          {error}
+        </p>
 
         {/* google login */}
-        <button className="w-full mt-4 flex items-center justify-center gap-2 border border-gray-200 rounded-lg px-4 py-2 transition-all duration-400 hover:bg-gray-100 cursor-pointer">
+        <button
+          className="w-full mt-4 flex items-center justify-center gap-2 border border-gray-200 rounded-lg px-4 py-2 transition-all duration-400 hover:bg-gray-100 cursor-pointer"
+          onClick={handleGoogleAuth}
+        >
           <FcGoogle size={20} />
           <span>Sign In with Google</span>
         </button>

@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { serverUrl } from "../App";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
 
+
 const ForgotPassword = () => {
   const [step, setStep] = useState(1);
   const [email, setEmail] = useState("");
@@ -15,6 +16,7 @@ const ForgotPassword = () => {
 
   const [showNewPassword, setShowNewPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [error, setError] = useState("");
 
   const navigate = useNavigate();
 
@@ -26,9 +28,10 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setError("");
       setStep(2);
     } catch (error) {
-      console.log(error);
+      setError(error?.response?.data?.message);
     }
   };
 
@@ -40,9 +43,10 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setError("");
       setStep(3);
     } catch (error) {
-      console.log(error);
+      setError(error?.response?.data?.message);
     }
   };
   const handleResetPassword = async () => {
@@ -56,9 +60,10 @@ const ForgotPassword = () => {
         { withCredentials: true }
       );
       console.log(result);
+      setError("");
       navigate("/signin");
     } catch (error) {
-      console.log(error);
+      setError(error?.response?.data?.message);
     }
   };
 
@@ -90,6 +95,7 @@ const ForgotPassword = () => {
                 placeholder="Enter Your Email"
                 onChange={(e) => setEmail(e.target.value)}
                 value={email}
+                required
               />
               <button
                 className="w-full mt-4 font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
@@ -97,6 +103,9 @@ const ForgotPassword = () => {
               >
                 Send Otp
               </button>
+              <p className="text-red-600 font-medium text-center my-[10px]">
+                {error}
+              </p>
             </div>
           </div>
         )}
@@ -116,6 +125,7 @@ const ForgotPassword = () => {
                 placeholder="Enter OTP"
                 onChange={(e) => setOtp(e.target.value)}
                 value={otp}
+                required
               />
               <button
                 className="w-full mt-4 font-semibold py-2 rounded-lg transition duration-200 bg-[#ff4d2d] text-white hover:bg-[#e64323] cursor-pointer"
@@ -123,6 +133,9 @@ const ForgotPassword = () => {
               >
                 Verify
               </button>
+              <p className="text-red-600 font-medium text-center my-[10px]">
+                {error}
+              </p>
             </div>
           </div>
         )}
@@ -144,6 +157,7 @@ const ForgotPassword = () => {
                   placeholder="Enter New Password"
                   onChange={(e) => setNewPassword(e.target.value)}
                   value={newPassword}
+                  required
                 />
                 <button
                   type="button"
@@ -168,6 +182,7 @@ const ForgotPassword = () => {
                   placeholder="Confirm Password"
                   onChange={(e) => setConfirmNewPassword(e.target.value)}
                   value={confirmNewPassword}
+                  required
                 />
                 <button
                   type="button"
@@ -185,6 +200,9 @@ const ForgotPassword = () => {
               >
                 Reset Password
               </button>
+              <p className="text-red-600 font-medium text-center my-[10px]">
+                {error}
+              </p>
             </div>
           </div>
         )}
