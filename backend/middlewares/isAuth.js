@@ -11,7 +11,6 @@ const isAuth = async(req, res, next) =>{
         if(!decodeToken){
             return res.status(400).json({message: "User Not Found"})
         }
-        console.log(decodeToken);
         req.userId = decodeToken.userId
         next()
         

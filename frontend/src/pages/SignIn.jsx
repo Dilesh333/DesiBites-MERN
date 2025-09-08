@@ -10,7 +10,8 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { auth } from "../../firebase";
 
 import { ClipLoader } from "react-spinners";
-
+import { useDispatch } from "react-redux";
+import { setUserData } from "../../redux/userSlice";
 
 const SignIn = () => {
   const primaryColor = "#ff4d2d";
@@ -26,11 +27,13 @@ const SignIn = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch()
 
   const handleSignIn = async () => {
     try {
-      setLoading(true)
+      setLoading(true);
       const result = await axios.post(
         `${serverUrl}/api/auth/signin`,
         {
@@ -39,12 +42,12 @@ const SignIn = () => {
         },
         { withCredentials: true }
       );
-      console.log(result);
+      dispatch(setUserData(result.data))
       setError("");
-      setLoading(false)
+      setLoading(false);
     } catch (error) {
       setError(error?.response?.data?.message);
-      setLoading(false)
+      setLoading(false);
     }
   };
 
@@ -60,7 +63,7 @@ const SignIn = () => {
         },
         { withCredentials: true }
       );
-      console.log(data);
+      dispatch(setUserData(data))
     } catch (error) {
       console.log(error);
     }
@@ -144,7 +147,6 @@ const SignIn = () => {
           onClick={handleSignIn}
         >
           {loading ? <ClipLoader size={20} color="white" /> : "Sign In"}
-          
         </button>
         <p className="text-red-600 font-medium text-center my-[10px]">
           {error}
