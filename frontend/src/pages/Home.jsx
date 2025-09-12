@@ -12,7 +12,7 @@ const Home = () => {
       {userData?.role === 'user' && <UserDashboard/>}
       {userData?.role === 'owner' && <OwnerDashboard/>}
       {userData?.role === 'deliveryBoy' && <DeliveryBoyDashboard/>}
-      <Navbar/>
+      
     </div>
   )
 }
