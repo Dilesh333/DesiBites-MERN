@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { FaUtensils } from "react-icons/fa";
 import { serverUrl } from "../App";
-import { setMyshopData } from "../../redux/ownerSlice";
+import { setmyShopData } from "../../redux/ownerSlice";
 import axios from "axios";
 
 const CreateEditShop = () => {
@@ -15,7 +15,7 @@ const CreateEditShop = () => {
   const [name, setName] = useState(myShopData?.name || "");
   const [address, setAddress] = useState(myShopData?.address || currentAddress);
   const [currentCity, setCurrentCity] = useState(myShopData?.city || city);
-  const [State, setState] = useState(myShopData?.state || state);
+  const [currentState, setCurrentState] = useState(myShopData?.state || state);
   const [frontendImage, setFrontendImage] = useState(myShopData?.image || null);
   const [backendImage, setBackendImage] = useState(null);
 
@@ -32,8 +32,8 @@ const CreateEditShop = () => {
     try {
       const formData = new FormData();
       formData.append("name", name);
-      formData.append("city", city);
-      formData.append("state", state);
+      formData.append("city", currentCity);
+      formData.append("state", currentState);
       formData.append("address", address);
       if (backendImage) {
         formData.append("image", backendImage);
@@ -43,7 +43,7 @@ const CreateEditShop = () => {
         formData,
         { withCredentials: true }
       );
-      dispatch(setMyshopData((result.data)))
+      dispatch(setmyShopData((result.data)))
       console.log(result.data)
     } catch (error) {
         console.log(error)
@@ -133,7 +133,7 @@ const CreateEditShop = () => {
                 placeholder="Enter Shop City"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4d2d] focus:border-transparent transition"
                 onChange={(e) => setCurrentCity(e.target.value)}
-                value={city}
+                value={currentCity}
               />
             </div>
             <div>
@@ -144,8 +144,8 @@ const CreateEditShop = () => {
                 type="text"
                 placeholder="Enter Shop State"
                 className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4d2d] focus:border-transparent transition"
-                onChange={(e) => setState(e.target.value)}
-                value={state}
+                onChange={(e) => setCurrentState(e.target.value)}
+                value={currentState}
               />
             </div>
           </div>
@@ -160,7 +160,7 @@ const CreateEditShop = () => {
               rows={3}
               className="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-[#ff4d2d] focus:border-transparent transition resize-none"
               onChange={(e) => setAddress(e.target.value)}
-              value={currentAddress}
+              value={address}
             ></textarea>
           </div>
 
