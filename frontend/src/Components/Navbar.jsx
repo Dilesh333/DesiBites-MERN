@@ -11,6 +11,7 @@ import { FaPlus } from "react-icons/fa";
 
 const Navbar = () => {
   const { userData, city } = useSelector((state) => state.user);
+  const { myShopData } = useSelector((state) => state.owner);
   const [showInfo, setShowInfo] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const dispatch = useDispatch();
@@ -87,13 +88,19 @@ const Navbar = () => {
         {/* owner nav */}
         {userData.role === "owner" ? (
           <>
-            <button className="hidden md:flex  items-center gap-1 p-2 cursor-pointer rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d]">
-              <FaPlus size={20} /> <span>Add Food Item</span>
-            </button>
-            {/* small device */}
-            <button className="md:hidden flex  items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]">
-              <FaPlus size={20} />
-            </button>
+            {myShopData && (
+              <>
+                {" "}
+                <button className="hidden md:flex  items-center gap-1 p-2 cursor-pointer rounded-lg bg-[#ff4d2d]/10 text-[#ff4d2d]">
+                  <FaPlus size={20} /> <span>Add Food Item</span>
+                </button>
+                {/* small device */}
+                <button className="md:hidden flex  items-center gap-1 p-2 cursor-pointer rounded-full bg-[#ff4d2d]/10 text-[#ff4d2d]">
+                  <FaPlus size={20} />
+                </button>
+              </>
+            )}
+
             <div className=" hidden md:flex relative  items-center gap-2 cursor-pointer  px-3 py-2 rounded-lg font-medium bg-[#ff4d2d]/10 text-[#ff4d2d] ">
               <FaReceipt size={20} />
               <span>My Orders</span>
