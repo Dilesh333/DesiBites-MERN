@@ -9,6 +9,7 @@ import Home from "./pages/Home";
 import useGetCity from "../hooks/useGetCity";
 import useGetMyShop from "../hooks/useGetMyShop";
 import CreateEditShop from "./pages/CreateEditShop";
+import AddItem from "./pages/AddItem";
 
 export const serverUrl = "http://localhost:8000";
 
@@ -40,6 +41,10 @@ const App = () => {
       <Route
         path="/create-edit-shop"
         element={userData ? <CreateEditShop /> : <Navigate to={"/signin"} />}
+      />
+      <Route
+        path="/add-items"
+        element={userData ? <AddItem /> : <Navigate to={"/signin"} />}
       />
     </Routes>
   );
